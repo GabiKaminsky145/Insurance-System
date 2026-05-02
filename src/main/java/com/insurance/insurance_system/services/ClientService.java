@@ -84,7 +84,7 @@ public class ClientService {
 
         return client.getContactMethods().stream()
                 .anyMatch(cm ->
-                        cm.getType() == type &&
+                        cm.getType().equals(type) &&
                                 Objects.equals(cm.getValue(), value)
                 );
     }

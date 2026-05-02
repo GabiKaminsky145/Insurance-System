@@ -1,0 +1,255 @@
+{
+  "info": {
+    "_postman_id": "a0992523-7749-4e94-9fef-fbadcc02d3ba",
+    "name": "Insurance System API",
+    "description": "Postman collection for Insurance System assignment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18215445"
+  },
+  "item": [
+    {
+      "name": "Create Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"p1\",\n  \"name\": \"Life Insurance\",\n  \"description\": \"Basic coverage\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Product By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/products/p1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "p1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Life Insurance Premium\",\n  \"description\": \"Updated premium plan\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/products/p1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "p1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Identify NEW Client",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": \"c1\",\n  \"name\": \"John\",\n  \"contactMethods\": [\n    {\n      \"type\": \"EMAIL\",\n      \"value\": \"john@mail.com\"\n    }\n  ],\n  \"authMethodType\": \"EMAIL\",\n  \"authMethodValue\": \"john@mail.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/clients/identify",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clients",
+            "identify"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Identify EXISTING Client",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": \"c1\",\n  \"authMethodType\": \"EMAIL\",\n  \"authMethodValue\": \"john@mail.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/clients/identify",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clients",
+            "identify"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Unauthorized Client (Negative Test)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": \"c1\",\n  \"authMethodType\": \"EMAIL\",\n  \"authMethodValue\": \"wrong@mail.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/clients/identify",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clients",
+            "identify"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Assign Product to Client",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"authMethodType\": \"EMAIL\",\n  \"authMethodValue\": \"john@mail.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/clients/c1/products/p1/buy",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clients",
+            "c1",
+            "products",
+            "p1",
+            "buy"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Duplicate Product Assignment (Negative Test)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"authMethodType\": \"EMAIL\",\n  \"authMethodValue\": \"john@mail.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/clients/c1/products/p1/buy",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clients",
+            "c1",
+            "products",
+            "p1",
+            "buy"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}
