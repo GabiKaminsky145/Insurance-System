@@ -27,17 +27,17 @@ CLIENT
 - id (PK)
 - name
 
-CLIENT_CONTACT_METHOD
-- clientId (FK)
+CONTACT_METHOD  (embedded in Client — no separate table in this implementation)
 - type  (EMAIL / PHONE / MAIL)
 - value
+- belongs to one CLIENT via clientId FK (added by ORM in a real DB)
 
 PRODUCT
 - id (PK)
 - name
 - description
 
-CLIENT_PRODUCT  ← the missing flow (see below)
+CLIENT_PRODUCT
 - clientId  (FK)
 - productId (FK)
 - UNIQUE(clientId, productId)
