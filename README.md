@@ -50,7 +50,7 @@ erDiagram
   }
 ```
 
-Relations:
+### Relations:
 - One client → many contact methods
 - Client ↔ Product is many-to-many
 - Each client can own each product only once — enforced by `Set<Product>`
