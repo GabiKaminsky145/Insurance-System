@@ -98,3 +98,12 @@ mvn test
 ```
 
 12 unit tests covering: client creation, authentication flows, product purchase, and all error cases.
+
+## Security Note
+
+`ProductController` endpoints are intentionally open in this implementation
+(no database, no auth framework per requirements).
+
+In production this would be secured with Spring Security:
+- Admin endpoints (`/api/products`) → `@PreAuthorize("hasRole('ADMIN')")`
+- Client endpoints → JWT token validation
