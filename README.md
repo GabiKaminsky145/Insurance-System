@@ -22,58 +22,80 @@ Swagger UI available at `http://localhost:8080/swagger-ui.html`
 
 ## ERD
 
-```
-CLIENT
-- id (PK)
-- name
+```mermaid
+erDiagram
+  CLIENT ||--o{ CONTACT_METHOD : "authenticated by"
+  CLIENT ||--o{ CLIENT_PRODUCT : "owns"
+  PRODUCT ||--o{ CLIENT_PRODUCT : "purchased via"
 
-CONTACT_METHOD  (embedded in Client — no separate table in this implementation)
-- type  (EMAIL / PHONE / MAIL)
-- value
-- belongs to one CLIENT via clientId FK (added by ORM in a real DB)
+  CLIENT {
+    string id PK
+    string name
+  }
 
-PRODUCT
-- id (PK)
-- name
-- description
+  CONTACT_METHOD {
+    string type "EMAIL / PHONE / MAIL"
+    string value
+  }
 
-CLIENT_PRODUCT
-- clientId  (FK)
-- productId (FK)
-- UNIQUE(clientId, productId)
+  PRODUCT {
+    string id PK
+    string name
+    string description
+  }
+
+  CLIENT_PRODUCT {
+    string clientId FK
+    string productId FK
+  }
 ```
 
 Relations:
 - One client → many contact methods
 - Client ↔ Product is many-to-many
 - Each client can own each product only once — enforced by `Set<Product>`
+- `CONTACT_METHOD` has no surrogate PK — identity is `(clientId + type + value)` per requirements
 
 ---
 
 ## Endpoints
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| `POST` | `/api/clients/identify` | Create or authenticate a client, returns their product list |
-| `POST` | `/api/clients/{clientId}/products/{productId}/buy` | Assign a product to an authenticated client |
-| `POST` | `/api/products` | Add a new product to the catalog |
-| `PUT`  | `/api/products/{id}` | Update an existing product |
-| `GET`  | `/api/products` | List all products |
-| `GET`  | `/api/products/{id}` | Get a single product |
+| Method | URL | Auth | Description |
+|--------|-----|------|-------------|
+| `POST` | `/api/clients/identify` | Client | Create or authenticate a client, returns their product list |
+| `POST` | `/api/clients/{clientId}/products/{productId}/buy` | Client | Authenticated client buys a product |
+| `POST` | `/api/products` | Admin headers | Add a new product to the catalog |
+| `PUT`  | `/api/products/{id}` | Admin headers | Update an existing product |
+| `GET`  | `/api/products` | None | List all products |
+| `GET`  | `/api/products/{id}` | None | Get a single product |
+
+Admin endpoints require `X-Admin-Username` and `X-Admin-Password` headers.
+Credentials are defined in `application.properties`.
 
 ---
 
 ## What's missing in the original diagrams
 
-Diagram 1 shows: create client → authenticate → get product list
+**Diagram 1** shows: create client → authenticate → get product list
 
-Diagram 2 shows: add product to catalog → update product
+**Diagram 2** shows: buy new product → data store / update product → data store
 
-Neither diagram shows how a product actually gets linked to a client.
-Without this, a new client always gets an empty product list — the two diagrams are disconnected.
+There are two things missing:
 
-The missing flow is the `/buy` endpoint — an authenticated client selects a product
-from the catalog and it gets saved to their account.
+**1. The connection between the two diagrams**
+Diagram 1 ends with "get client product list" and Diagram 2 shows a client buying
+a product, but there is no arrow or flow connecting them. A client needs to be
+authenticated first (Diagram 1) before they can buy (Diagram 2).
+This is implemented as `POST /api/clients/{clientId}/products/{productId}/buy`
+which authenticates the client before assigning the product.
+
+**2. No admin flow anywhere**
+The diagrams only cover client actions. But someone needs to add products to
+the catalog before any client can buy them. There is no diagram showing who
+creates or manages the product catalog.
+This is implemented as the admin-protected `POST /api/products` and
+`PUT /api/products/{id}` endpoints, secured via request headers.
+In production this would use Spring Security with `@PreAuthorize("hasRole('ADMIN')")`.
 
 ---
 
@@ -82,12 +104,14 @@ from the catalog and it gets saved to their account.
 Import `Insurance_System_API_postman_collection.json` into Postman.
 
 Run in this order:
-1. Create Product
-2. Identify NEW Client
-3. Assign Product to Client
-4. Identify EXISTING Client → should now return the product in the list
-5. Duplicate Product Assignment → expect `409 Conflict`
-6. Unauthorized Client → expect `401 Unauthorized`
+1. Create Product (Admin) — requires admin headers
+2. Create Product wrong credentials → expect `401`
+3. Update Product (Admin)
+4. Identify NEW Client
+5. Assign Product to Client
+6. Verify — Identify after buying → should now return the product in the list
+7. Duplicate Product Assignment → expect `409 Conflict`
+8. Unauthorized Client → expect `401 Unauthorized`
 
 ---
 
@@ -98,12 +122,3 @@ mvn test
 ```
 
 12 unit tests covering: client creation, authentication flows, product purchase, and all error cases.
-
-## Security Note
-
-`ProductController` endpoints are intentionally open in this implementation
-(no database, no auth framework per requirements).
-
-In production this would be secured with Spring Security:
-- Admin endpoints (`/api/products`) → `@PreAuthorize("hasRole('ADMIN')")`
-- Client endpoints → JWT token validation
