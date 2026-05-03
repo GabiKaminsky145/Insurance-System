@@ -8,10 +8,17 @@ No database — everything is stored in memory using `ConcurrentHashMap`.
 - Java 17+
 - Maven 3.8+
 
-## How to run
+## How to run 
+
+From project main folder in terminal run:
 
 ```bash
 mvn spring-boot:run
+```
+or
+
+```
+.\mvnw.cmd spring-boot:run
 ```
 
 App starts on `http://localhost:8080`
