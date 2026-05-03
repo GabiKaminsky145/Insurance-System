@@ -6,16 +6,20 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "18215445"
   },
+  "variable": [
+    { "key": "baseUrl",        "value": "http://localhost:8080" },
+    { "key": "adminUsername",  "value": "admin"                },
+    { "key": "adminPassword",  "value": "admin123"             }
+  ],
   "item": [
     {
-      "name": "Create Product",
+      "name": "Create Product (Admin)",
       "request": {
         "method": "POST",
         "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
+          { "key": "Content-Type",      "value": "application/json"    },
+          { "key": "X-Admin-Username",  "value": "{{adminUsername}}"   },
+          { "key": "X-Admin-Password",  "value": "{{adminPassword}}"   }
         ],
         "body": {
           "mode": "raw",
@@ -23,13 +27,50 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/products",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "products"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "products"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Product — Wrong Admin Credentials (Negative Test)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type",      "value": "application/json" },
+          { "key": "X-Admin-Username",  "value": "admin"            },
+          { "key": "X-Admin-Password",  "value": "wrongpassword"    }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"p2\",\n  \"name\": \"Health Insurance\",\n  \"description\": \"Should fail\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/products",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "products"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product (Admin)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type",      "value": "application/json"    },
+          { "key": "X-Admin-Username",  "value": "{{adminUsername}}"   },
+          { "key": "X-Admin-Password",  "value": "{{adminPassword}}"   }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Life Insurance Premium\",\n  \"description\": \"Updated premium plan\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/products/p1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "products", "p1"]
         }
       },
       "response": []
@@ -41,13 +82,8 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/products",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "products"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "products"]
         }
       },
       "response": []
@@ -59,42 +95,8 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/api/products/p1",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "products",
-            "p1"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update Product",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Life Insurance Premium\",\n  \"description\": \"Updated premium plan\"\n}"
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/products/p1",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "products",
-            "p1"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "products", "p1"]
         }
       },
       "response": []
@@ -104,10 +106,7 @@
       "request": {
         "method": "POST",
         "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
+          { "key": "Content-Type", "value": "application/json" }
         ],
         "body": {
           "mode": "raw",
@@ -115,14 +114,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/clients/identify",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "clients",
-            "identify"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "clients", "identify"]
         }
       },
       "response": []
@@ -132,10 +125,7 @@
       "request": {
         "method": "POST",
         "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
+          { "key": "Content-Type", "value": "application/json" }
         ],
         "body": {
           "mode": "raw",
@@ -143,14 +133,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/clients/identify",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "clients",
-            "identify"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "clients", "identify"]
         }
       },
       "response": []
@@ -160,10 +144,7 @@
       "request": {
         "method": "POST",
         "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
+          { "key": "Content-Type", "value": "application/json" }
         ],
         "body": {
           "mode": "raw",
@@ -171,14 +152,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/clients/identify",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "clients",
-            "identify"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "clients", "identify"]
         }
       },
       "response": []
@@ -188,10 +163,7 @@
       "request": {
         "method": "POST",
         "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
+          { "key": "Content-Type", "value": "application/json" }
         ],
         "body": {
           "mode": "raw",
@@ -199,17 +171,27 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/clients/c1/products/p1/buy",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "clients",
-            "c1",
-            "products",
-            "p1",
-            "buy"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "clients", "c1", "products", "p1", "buy"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify — Identify after buying (should show product)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": \"c1\",\n  \"authMethodType\": \"EMAIL\",\n  \"authMethodValue\": \"john@mail.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/clients/identify",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "clients", "identify"]
         }
       },
       "response": []
@@ -219,10 +201,7 @@
       "request": {
         "method": "POST",
         "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
+          { "key": "Content-Type", "value": "application/json" }
         ],
         "body": {
           "mode": "raw",
@@ -230,26 +209,11 @@
         },
         "url": {
           "raw": "{{baseUrl}}/api/clients/c1/products/p1/buy",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "clients",
-            "c1",
-            "products",
-            "p1",
-            "buy"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "clients", "c1", "products", "p1", "buy"]
         }
       },
       "response": []
-    }
-  ],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080"
     }
   ]
 }
