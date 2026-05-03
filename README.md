@@ -58,22 +58,6 @@ erDiagram
 
 ---
 
-## Endpoints
-
-| Method | URL | Auth | Description |
-|--------|-----|------|-------------|
-| `POST` | `/api/clients/identify` | Client | Create or authenticate a client, returns their product list |
-| `POST` | `/api/clients/{clientId}/products/{productId}/buy` | Client | Authenticated client buys a product |
-| `POST` | `/api/products` | Admin headers | Add a new product to the catalog |
-| `PUT`  | `/api/products/{id}` | Admin headers | Update an existing product |
-| `GET`  | `/api/products` | None | List all products |
-| `GET`  | `/api/products/{id}` | None | Get a single product |
-
-Admin endpoints require `X-Admin-Username` and `X-Admin-Password` headers.
-Credentials are defined in `application.properties`.
-
----
-
 ## What's missing in the original diagrams
 
 **Diagram 1** shows: create client → authenticate → get product list
@@ -96,6 +80,22 @@ creates or manages the product catalog.
 This is implemented as the admin-protected `POST /api/products` and
 `PUT /api/products/{id}` endpoints, secured via request headers.
 In production this would use Spring Security with `@PreAuthorize("hasRole('ADMIN')")`.
+
+---
+
+## Endpoints
+
+| Method | URL | Auth | Description |
+|--------|-----|------|-------------|
+| `POST` | `/api/clients/identify` | Client | Create or authenticate a client, returns their product list |
+| `POST` | `/api/clients/{clientId}/products/{productId}/buy` | Client | Authenticated client buys a product |
+| `POST` | `/api/products` | Admin headers | Add a new product to the catalog |
+| `PUT`  | `/api/products/{id}` | Admin headers | Update an existing product |
+| `GET`  | `/api/products` | None | List all products |
+| `GET`  | `/api/products/{id}` | None | Get a single product |
+
+Admin endpoints require `X-Admin-Username` and `X-Admin-Password` headers.
+Credentials are defined in `application.properties`.
 
 ---
 
