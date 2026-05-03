@@ -128,4 +128,12 @@ Run in this order:
 mvn test
 ```
 
+or
+
+```bash
+.\mvnw.cmd test
+```
+
+
+
 12 unit tests covering: client creation, authentication flows, product purchase, and all error cases.
